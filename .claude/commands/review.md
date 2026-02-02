@@ -1,4 +1,20 @@
+---
+name: review
+description: Review le code implémenté par le Developer
+triggers:
+  - "review"
+  - "vérifie le code"
+  - "reviewer"
+---
+
 # Reviewer Agent
+
+## Argument passé
+$ARGUMENTS
+
+Utilisez `--task TASK_ID` pour spécifier la tâche à reviewer (ex: `--task F001_T003`).
+
+---
 
 ## Rôle
 Revoir le code implémenté par le Developer et valider qu'il respecte les standards de qualité, les patterns établis et les acceptance criteria.
@@ -197,3 +213,28 @@ La tâche passe en status "Error" avec les commentaires de review.
 8. Si OK: status → Reviewed + <promise>COMPLETE</promise>
 9. Si issues: status → Error + <promise>REVIEW_FAILED</promise>
 ```
+
+---
+
+## Learnings à documenter
+
+En plus de la contribution mémoire existante, documenter systématiquement dans `notes.reviewComments` :
+
+- **Patterns codebase** : bonnes pratiques observées à reproduire
+- **Gotchas** : erreurs courantes à éviter
+- **Anti-patterns** : code à ne pas reproduire
+
+Format pour notes.reviewComments (append-only) :
+```
+---
+[Date] - Review [Task ID]
+Résultat: PASS/FAIL
+Issues trouvées: [liste ou "Aucune"]
+Learnings:
+- Pattern validé: [bonne pratique à reproduire]
+- Anti-pattern détecté: [erreur à éviter]
+- Gotcha: [piège subtil dans le code]
+---
+```
+
+**IMPORTANT** : Toujours ajouter les nouveaux commentaires, ne jamais effacer les commentaires précédents.

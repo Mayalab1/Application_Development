@@ -26,7 +26,8 @@ project_root/
 ├── CLAUDE.md             # Instructions globales pour Claude
 ├── run.sh                # Script principal d'orchestration
 ├── config.json           # Configuration du framework
-├── application.md        # Description de l'application
+├── application.md        # Description de l'application (à créer)
+├── application_template.md # Template pour créer application.md
 ├── status.json           # État global du projet
 │
 ├── context/              # Contexte partagé
@@ -73,8 +74,69 @@ project_root/
 │
 ├── locks/                # Gestion des locks
 ├── logs/                 # Logs et archives
-└── src/                  # Code source généré
+├── application_generated/                  # Code source généré
+│
+└── .claude/              # Configuration Claude Code
+    └── commands/         # Skills slash commands
+        ├── ba.md         # /ba - Business Analyst
+        ├── architect.md  # /architect - Architect
+        ├── dev.md        # /dev - Developer
+        ├── review.md     # /review - Reviewer
+        └── test.md       # /test - Tester
 ```
+
+---
+
+## Créer application.md
+
+Le fichier `application.md` est le point d'entrée du pipeline. Il décrit l'application à développer et sera analysé par le Business Analyst pour être décomposé en features.
+
+### Création
+
+```bash
+# Copier le template
+cp application_template.md application.md
+
+# Éditer avec votre description
+vim application.md  # ou votre éditeur préféré
+```
+
+### Sections obligatoires
+
+| Section | Minimum requis | Description |
+|---------|----------------|-------------|
+| **Introduction** | 3 lignes | Contexte, problème et solution |
+| **Goals** | 3 objectifs | Mesurables et spécifiques |
+| **User Stories** | 3 US | Format "En tant que... je veux... afin de..." |
+| **Functional Requirements** | 3 FR | Exigences explicites |
+| **Non-Goals** | 3 items | Ce que le projet ne fera PAS |
+
+### Format des User Stories
+
+```markdown
+### US-001: [Titre court]
+- **Description** : En tant que [rôle], je veux [action] afin de [bénéfice]
+- **Critères d'acceptation** :
+  - Critère 1 (vérifiable)
+  - Critère 2 (vérifiable)
+- **Priorité** : Haute/Moyenne/Basse
+```
+
+### Section Non-Goals
+
+La section Non-Goals est **critique** pour éviter le scope creep. Elle définit explicitement ce que le projet ne fera PAS, même si cela pourrait sembler utile.
+
+Exemples :
+- ❌ Support multi-langue (v1 en français uniquement)
+- ❌ Application mobile native (web responsive suffit)
+- ❌ Intégration avec systèmes legacy
+
+### Conseils pour une bonne description
+
+1. **Soyez spécifique** : évitez les termes vagues comme "interface intuitive"
+2. **Utilisez des verbes d'action** : "Le système doit afficher..." plutôt que "Une interface de..."
+3. **Définissez les limites** : les Non-Goals sont aussi importants que les Goals
+4. **Listez les questions ouvertes** : les points non résolus permettent au BA de poser les bonnes questions
 
 ---
 
@@ -271,10 +333,10 @@ Chaque répertoire peut avoir un `CONTEXT.md` local avec :
 **Chargement autonome** : Vous décidez quels CONTEXT.md charger.
 ```bash
 # Découvrir les CONTEXT.md existants
-find src/ -name "CONTEXT.md" -type f
+find application_generated/ -name "CONTEXT.md" -type f
 
 # Lire ceux pertinents pour votre tâche
-cat src/components/CONTEXT.md
+cat application_generated/components/CONTEXT.md
 ```
 
 ---
@@ -339,20 +401,74 @@ Le fichier `config.json` contient tous les paramètres configurables :
 
 ---
 
+## Skills Claude Code
+
+Le framework fournit des slash commands pour invoquer chaque agent directement dans Claude Code.
+
+### Commandes disponibles
+
+| Skill | Usage | Description |
+|-------|-------|-------------|
+| `/ba` | `/ba` ou `/ba --update 260202:1430` | Business Analyst - Décompose application.md en features |
+| `/architect` | `/architect` ou `/architect --feature feature_001` | Architect - Décompose features en tâches |
+| `/dev` | `/dev --task F001_T003` | Developer - Implémente une tâche |
+| `/review` | `/review --task F001_T003` | Reviewer - Review le code |
+| `/test` | `/test --task F001_T003` | Tester - Valide les acceptance criteria |
+
+### Exemples d'utilisation
+
+```bash
+# Démarrer l'analyse d'une nouvelle application
+/ba
+
+# Traiter une mise à jour de l'application
+/ba --update 260202:1430
+
+# Décomposer une feature spécifique en tâches
+/architect --feature feature_001_user_auth
+
+# Pipeline complet pour une tâche
+/dev --task F001_T003
+/review --task F001_T003
+/test --task F001_T003
+```
+
+### Workflow Learnings
+
+Chaque agent doit documenter systématiquement ses découvertes dans `notes.implementation` (append-only). Format recommandé :
+
+```markdown
+---
+[Date] - [Task ID]
+Résumé: Brève description du travail effectué
+Fichiers modifiés: liste des fichiers
+Learnings:
+- Patterns codebase: conventions découvertes, structures récurrentes
+- Gotchas: pièges évités, comportements inattendus
+- Dépendances: relations entre fichiers découvertes
+---
+```
+
+---
+
 ## Exemple de workflow complet
 
 ```bash
-# 1. Nouvelle application à développer
-vim application.md  # Écrire la description
+# 1. Créer application.md à partir du template
+cp application_template.md application.md
+vim application.md  # Compléter avec votre description
 
-# 2. Décomposition en features
+# 2. Décomposition en features (via CLI ou skill)
 ./run.sh --agent business-analyst
+# ou: /ba
 
 # 3. Décomposition en tâches (toutes les features)
 ./run.sh --agent architect
+# ou: /architect
 
 # 4. Implémentation parallèle (3 sessions max)
 ./run.sh --agent developer
+# ou pour une tâche: /dev --task F001_T003
 
 # 5. Vérifier le status
 cat status.json | jq '.features[] | {id, status}'

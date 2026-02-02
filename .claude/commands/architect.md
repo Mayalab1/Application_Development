@@ -1,4 +1,20 @@
+---
+name: architect
+description: Décompose une feature en tâches atomiques
+triggers:
+  - "décompose en tâches"
+  - "crée tasks.json"
+  - "architect"
+---
+
 # Architect Agent - Task Decomposition
+
+## Argument passé
+$ARGUMENTS
+
+Utilisez `--feature FEATURE_ID` pour traiter une feature spécifique (ex: `--feature feature_001`).
+
+---
 
 ## Rôle
 Décomposer une feature en tâches atomiques implémentables par des sessions indépendantes.
@@ -238,3 +254,25 @@ Si une tâche est trop complexe à décomposer :
 - ☐ Lock type/target définis
 - ☐ Priorités cohérentes avec la feature
 - ☐ tasks.json valide selon le schéma
+
+---
+
+## Learnings à documenter
+
+En plus de la contribution mémoire existante, documenter systématiquement :
+
+- **Patterns codebase** : conventions de nommage, structure des fichiers
+- **Gotchas** : dépendances cachées, ordre d'implémentation critique
+- **Architecture** : décisions techniques importantes
+
+Format pour notes (append-only) :
+```
+---
+[Date] - Architect Session - [Feature ID]
+Résumé: Décomposition en N tâches
+Learnings:
+- Pattern: [structure découverte]
+- Gotcha: [dépendance cachée]
+- Architecture: [décision importante]
+---
+```

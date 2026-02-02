@@ -1,4 +1,20 @@
+---
+name: dev
+description: Implémente une tâche atomique
+triggers:
+  - "implémente"
+  - "développe"
+  - "developer"
+---
+
 # Developer Agent
+
+## Argument passé
+$ARGUMENTS
+
+Utilisez `--task TASK_ID` pour spécifier la tâche à implémenter (ex: `--task F001_T003`).
+
+---
 
 ## Rôle
 Implémenter UNE tâche atomique selon ses spécifications. Chaque session est isolée et sans mémoire des sessions précédentes.
@@ -237,3 +253,28 @@ Avant de signaler COMPLETE :
 9. Contribuer à la mémoire si découverte utile
 10. <promise>COMPLETE</promise>
 ```
+
+---
+
+## Learnings à documenter
+
+En plus de la contribution mémoire existante, documenter systématiquement dans `notes.implementation` (append-only) :
+
+- **Patterns codebase** : conventions découvertes, structures récurrentes
+- **Gotchas** : pièges évités, comportements inattendus
+- **Dépendances** : relations entre fichiers découvertes
+
+Format pour notes.implementation (append-only) :
+```
+---
+[Date] - [Task ID]
+Résumé: Brève description du travail effectué
+Fichiers modifiés: application_generated/components/UserForm.tsx, application_generated/models/User.ts
+Learnings:
+- Pattern: Le projet utilise des validateurs zod pour tous les formulaires
+- Gotcha: Le DatePicker retourne des dates en UTC, conversion locale nécessaire
+- Dépendance: UserForm.tsx dépend de useValidation hook
+---
+```
+
+**IMPORTANT** : Toujours ajouter, ne jamais remplacer le contenu existant de `notes.implementation`.
