@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "last_updated": null,
+  "categories": [
+    {
+      "path": "_inbox",
+      "description": "Zone de staging pour entrées à classifier",
+      "entry_count": 0,
+      "subcategories": []
+    },
+    {
+      "path": "domain",
+      "description": "Connaissances du domaine métier",
+      "entry_count": 0,
+      "subcategories": ["rules", "workflows"]
+    },
+    {
+      "path": "architecture",
+      "description": "Patterns et décisions d'architecture",
+      "entry_count": 0,
+      "subcategories": []
+    },
+    {
+      "path": "ui_patterns",
+      "description": "Patterns d'interface utilisateur",
+      "entry_count": 0,
+      "subcategories": []
+    },
+    {
+      "path": "configuration",
+      "description": "Configuration et paramétrage",
+      "entry_count": 0,
+      "subcategories": []
+    }
+  ],
+  "pending_classification": 0,
+  "category_suggestions": []
+}

@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "memory_entry.schema.json",
+  "title": "Memory Entry Schema",
+  "description": "Schema for shared memory entries",
+  "type": "object",
+  "required": ["id", "version", "created", "updated", "author", "category", "tags", "content"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^mem_[a-z_]+_[0-9]{3}$",
+      "description": "Unique memory entry identifier"
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Version number"
+    },
+    "created": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Initial creation timestamp"
+    },
+    "updated": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last update timestamp"
+    },
+    "author": {
+      "type": "string",
+      "pattern": "^agent:[a-z-]+$",
+      "description": "Agent that created/updated this entry"
+    },
+    "task_origin": {
+      "type": "string",
+      "pattern": "^F[0-9]{3}_T[0-9]{3}$",
+      "description": "Task that originated this entry"
+    },
+    "category": {
+      "type": "string",
+      "description": "Category path (e.g., domain/rules)"
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "description": "Searchable tags"
+    },
+    "supersedes": {
+      "type": "string",
+      "description": "ID of previous version this supersedes"
+    },
+    "includes_previous": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this version includes previous valid content"
+    },
+    "audit_trail": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "version": { "type": "integer" },
+          "date": { "type": "string", "format": "date-time" },
+          "author": { "type": "string" },
+          "reason": { "type": "string" }
+        },
+        "required": ["version", "date", "author", "reason"]
+      },
+      "description": "Complete version history"
+    },
+    "content": {
+      "type": "string",
+      "description": "Markdown content of the entry"
+    },
+    "needs_classification": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this entry needs to be classified (inbox)"
+    },
+    "suggested_category": {
+      "type": "string",
+      "description": "Suggested category if needs_classification is true"
+    }
+  },
+  "additionalProperties": false
+}

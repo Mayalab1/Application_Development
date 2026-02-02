@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "feature.schema.json",
+  "title": "Feature Schema",
+  "description": "Schema for feature definition in the multi-session orchestration framework",
+  "type": "object",
+  "required": ["id", "title", "description", "status", "priority", "acceptanceCriteria", "createdAt"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^feature_[0-9]{3}_[a-z_]+$",
+      "description": "Unique feature identifier (e.g., feature_001_lc_issuance)"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 5,
+      "maxLength": 100,
+      "description": "Short descriptive title"
+    },
+    "description": {
+      "type": "string",
+      "minLength": 20,
+      "description": "Detailed description of the feature"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["Draft", "Ready", "InProgress", "Completed", "OnHold", "Cancelled"],
+      "description": "Current feature status"
+    },
+    "priority": {
+      "type": "string",
+      "enum": ["critical", "high", "medium", "low"],
+      "description": "Feature priority level"
+    },
+    "dependencies": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^feature_[0-9]{3}_[a-z_]+$"
+      },
+      "description": "List of feature IDs this feature depends on"
+    },
+    "acceptanceCriteria": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "description": "List of acceptance criteria for the feature"
+    },
+    "estimatedTasks": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Estimated number of tasks for this feature"
+    },
+    "branchName": {
+      "type": "string",
+      "pattern": "^feature/[a-z0-9-]+$",
+      "description": "Git branch name for this feature"
+    },
+    "modified": {
+      "type": "boolean",
+      "default": false,
+      "description": "Flag indicating if feature was modified by an update"
+    },
+    "updatedFrom": {
+      "type": "string",
+      "pattern": "^[0-9]{6}:[0-9]{4}$",
+      "description": "Update file that modified this feature (YYMMDD:HHMM)"
+    },
+    "clarifications": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "question": { "type": "string" },
+          "answer": { "type": "string" },
+          "askedAt": { "type": "string", "format": "date-time" }
+        }
+      },
+      "description": "Q&A from clarification phase"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Feature creation timestamp"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last update timestamp"
+    },
+    "createdBy": {
+      "type": "string",
+      "description": "Agent that created this feature"
+    }
+  },
+  "additionalProperties": false
+}

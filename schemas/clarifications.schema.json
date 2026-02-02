@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "clarifications.schema.json",
+  "title": "Clarifications Schema",
+  "description": "Schema for Q&A clarification sessions (Ralph-inspired)",
+  "type": "object",
+  "required": ["sessionId", "source", "questions", "createdAt"],
+  "properties": {
+    "sessionId": {
+      "type": "string",
+      "description": "Unique session identifier for this clarification"
+    },
+    "source": {
+      "type": "string",
+      "description": "Source file that triggered clarification (e.g., application.md)"
+    },
+    "featureId": {
+      "type": "string",
+      "pattern": "^feature_[0-9]{3}_[a-z_]+$",
+      "description": "Related feature ID if applicable"
+    },
+    "questions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "question", "options"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^Q[0-9]+$",
+            "description": "Question identifier (Q1, Q2, etc.)"
+          },
+          "question": {
+            "type": "string",
+            "description": "The question text"
+          },
+          "category": {
+            "type": "string",
+            "enum": ["scope", "users", "integrations", "priority", "constraints", "technical", "other"],
+            "description": "Question category"
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["letter", "text"],
+              "properties": {
+                "letter": {
+                  "type": "string",
+                  "pattern": "^[A-D]$",
+                  "description": "Option letter (A, B, C, D)"
+                },
+                "text": {
+                  "type": "string",
+                  "description": "Option text"
+                }
+              }
+            },
+            "minItems": 2,
+            "maxItems": 4,
+            "description": "Available answer options"
+          },
+          "answer": {
+            "type": "string",
+            "pattern": "^[A-D]$",
+            "description": "Selected answer letter"
+          },
+          "answerText": {
+            "type": "string",
+            "description": "Free-form answer if not from options"
+          },
+          "answeredAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the answer was provided"
+          }
+        }
+      },
+      "minItems": 1,
+      "description": "List of clarification questions"
+    },
+    "summary": {
+      "type": "string",
+      "description": "Summary of clarifications for reference"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Session creation timestamp"
+    },
+    "completedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Session completion timestamp"
+    },
+    "createdBy": {
+      "type": "string",
+      "pattern": "^agent:[a-z-]+$",
+      "description": "Agent that created this session"
+    }
+  },
+  "additionalProperties": false
+}

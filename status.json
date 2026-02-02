@@ -1,0 +1,33 @@
+{
+  "project": {
+    "name": "",
+    "description": "",
+    "createdAt": null,
+    "updatedAt": null
+  },
+  "pipeline": {
+    "currentPhase": "initialization",
+    "lastAgent": null,
+    "lastRunAt": null
+  },
+  "features": [],
+  "statistics": {
+    "totalFeatures": 0,
+    "featuresCompleted": 0,
+    "totalTasks": 0,
+    "tasksCompleted": 0,
+    "tasksPending": 0,
+    "tasksInProgress": 0,
+    "tasksError": 0,
+    "tasksBlocked": 0
+  },
+  "quota": {
+    "lastCheck": null,
+    "remainingPercent": null,
+    "mode": "normal"
+  },
+  "locks": {
+    "active": 0,
+    "lastCleanup": null
+  }
+}

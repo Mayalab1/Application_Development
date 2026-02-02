@@ -1,0 +1,66 @@
+{
+  "execution": {
+    "maxParallelSessions": 3,
+    "ralphWiggum": {
+      "maxRetries": 7,
+      "retryDelaySeconds": 10
+    },
+    "quotaCheck": {
+      "enabled": true,
+      "minRemainingPercent": 10,
+      "lowQuotaThresholdPercent": 30,
+      "lowQuotaStrategy": "prioritize-critical",
+      "criticalQuotaStrategy": "pause-and-save",
+      "pauseOnLowQuota": true,
+      "maxTaskDurationMinutes": 30,
+      "autoResumeInterrupted": true
+    }
+  },
+  "models": {
+    "business-analyst": "claude-opus-4-5-20251101",
+    "architect": "claude-opus-4-5-20251101",
+    "developer": "claude-sonnet-4-5-20251101",
+    "reviewer": "claude-sonnet-4-5-20251101",
+    "tester": "claude-sonnet-4-5-20251101",
+    "default": "claude-sonnet-4-5-20251101"
+  },
+  "pipeline": {
+    "reviewerEnabled": true,
+    "testerEnabled": true
+  },
+  "locks": {
+    "expirationMinutes": 60,
+    "checkIntervalSeconds": 5
+  },
+  "memory": {
+    "maxEntriesPerQuery": 5,
+    "maxTotalEntriesPerTask": 10,
+    "relevanceThreshold": 0.7,
+    "defaultReadMode": "full",
+    "summaryMaxTokens": 100,
+    "warnIfExceeds": 15
+  },
+  "git": {
+    "autoCommit": true,
+    "commitPerTask": true,
+    "commitMessagePrefix": "feat"
+  },
+  "qualityChecks": {
+    "enabled": true,
+    "typecheck": true,
+    "lint": true,
+    "format": true,
+    "unitTests": true,
+    "integrationTests": false,
+    "failOnWarnings": true
+  },
+  "archiving": {
+    "enabled": true,
+    "archiveOnFeatureChange": true,
+    "keepSessionLogs": true
+  },
+  "logging": {
+    "level": "info",
+    "saveSessionLogs": true
+  }
+}

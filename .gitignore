@@ -1,0 +1,28 @@
+# Git
+.git/
+
+# Logs
+logs/sessions/*.log
+logs/archives/
+
+# Locks (runtime)
+locks/files/*.lock
+locks/directories/*.lock
+locks/patterns/*.lock
+
+# Node modules (if applicable)
+node_modules/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.bak

@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "lock.schema.json",
+  "title": "Lock Schema",
+  "description": "Schema for file/directory/pattern locks in the multi-session orchestration framework",
+  "type": "object",
+  "required": ["session_id", "locked_at", "expires_at", "task_id", "lock_type", "target"],
+  "properties": {
+    "session_id": {
+      "type": "string",
+      "description": "Unique session identifier that holds the lock"
+    },
+    "locked_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when lock was acquired"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when lock expires"
+    },
+    "task_id": {
+      "type": "string",
+      "pattern": "^F[0-9]{3}_T[0-9]{3}$",
+      "description": "Task that requires this lock"
+    },
+    "lock_type": {
+      "type": "string",
+      "enum": ["file", "directory", "pattern"],
+      "description": "Type of lock"
+    },
+    "target": {
+      "type": "string",
+      "description": "Target path, directory, or glob pattern"
+    },
+    "scope": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Expanded list of affected files"
+    }
+  },
+  "additionalProperties": false
+}

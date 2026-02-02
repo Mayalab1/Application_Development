@@ -1,0 +1,218 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "task.schema.json",
+  "title": "Task Schema",
+  "description": "Schema for atomic task definition in the multi-session orchestration framework",
+  "type": "object",
+  "required": ["id", "featureId", "title", "description", "type", "outputs", "acceptanceCriteria", "complexity", "priority", "status"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^F[0-9]{3}_T[0-9]{3}$",
+      "description": "Unique task identifier (e.g., F001_T003)"
+    },
+    "featureId": {
+      "type": "string",
+      "pattern": "^feature_[0-9]{3}_[a-z_]+$",
+      "description": "Parent feature identifier"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 5,
+      "maxLength": 100,
+      "description": "Action-oriented title (starts with verb)"
+    },
+    "description": {
+      "type": "string",
+      "minLength": 20,
+      "description": "Detailed task description"
+    },
+    "type": {
+      "type": "string",
+      "enum": ["ui", "logic", "api", "model", "test", "config", "doc"],
+      "description": "Type of task"
+    },
+    "inputs": {
+      "type": "object",
+      "properties": {
+        "context": {
+          "type": "string",
+          "description": "Current state of relevant code"
+        },
+        "data": {
+          "type": "string",
+          "description": "Data formats, business rules, constraints"
+        },
+        "references": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Files to consult"
+        }
+      }
+    },
+    "outputs": {
+      "type": "object",
+      "required": ["files"],
+      "properties": {
+        "files": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1,
+          "description": "Files to create/modify"
+        },
+        "artifacts": {
+          "type": "string",
+          "description": "Expected tangible result"
+        },
+        "lockType": {
+          "type": "string",
+          "enum": ["file", "directory", "pattern"],
+          "description": "Type of lock to acquire"
+        },
+        "lockTarget": {
+          "type": "string",
+          "description": "Lock target (file path, directory, or glob pattern)"
+        }
+      }
+    },
+    "acceptanceCriteria": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 2,
+      "description": "Boolean verifiable conditions"
+    },
+    "testCriteria": {
+      "type": "object",
+      "properties": {
+        "unit": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Automatable tests"
+        },
+        "manual": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Manual verification steps"
+        }
+      }
+    },
+    "dependencies": {
+      "type": "object",
+      "properties": {
+        "tasks": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^F[0-9]{3}_T[0-9]{3}$" },
+          "description": "Suggested prerequisite tasks (LLM evaluates if blocking)"
+        },
+        "files": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Suggested required files (LLM evaluates if blocking)"
+        },
+        "external": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "External APIs/services"
+        }
+      }
+    },
+    "constraints": {
+      "type": "object",
+      "properties": {
+        "mustNotModify": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Files that must not be modified"
+        },
+        "patterns": {
+          "type": "string",
+          "description": "Conventions to follow"
+        },
+        "performance": {
+          "type": ["string", "null"],
+          "description": "Performance requirements"
+        }
+      }
+    },
+    "complexity": {
+      "type": "string",
+      "enum": ["S", "M", "L", "XL"],
+      "description": "Estimated complexity (XL should be subdivided)"
+    },
+    "priority": {
+      "type": "string",
+      "enum": ["critical", "high", "medium", "low"],
+      "description": "Task priority level"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["Pending", "InProgress", "Implemented", "Reviewed", "Tested", "Interrupted", "Error", "Blocked"],
+      "description": "Current task status"
+    },
+    "statusHistory": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string" },
+          "timestamp": { "type": "string", "format": "date-time" },
+          "reason": { "type": "string" }
+        }
+      },
+      "description": "History of status changes"
+    },
+    "passes": {
+      "type": "boolean",
+      "default": false,
+      "description": "True when all acceptance criteria are validated"
+    },
+    "execution": {
+      "type": "object",
+      "properties": {
+        "assignedSession": {
+          "type": ["string", "null"],
+          "description": "Session ID currently working on this task"
+        },
+        "lockedAt": {
+          "type": ["string", "null"],
+          "format": "date-time"
+        },
+        "startedAt": {
+          "type": ["string", "null"],
+          "format": "date-time"
+        },
+        "completedAt": {
+          "type": ["string", "null"],
+          "format": "date-time"
+        },
+        "attempts": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 0
+        },
+        "maxRetries": {
+          "type": "integer",
+          "default": 7
+        }
+      }
+    },
+    "notes": {
+      "type": "object",
+      "properties": {
+        "implementation": {
+          "type": "string",
+          "description": "Implementation notes"
+        },
+        "errorLog": {
+          "type": "string",
+          "description": "Error details if failed"
+        },
+        "reviewComments": {
+          "type": "string",
+          "description": "Review feedback"
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

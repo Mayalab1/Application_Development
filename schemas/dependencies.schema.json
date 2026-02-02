@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "dependencies.schema.json",
+  "title": "Dependencies Schema",
+  "description": "Schema for external dependencies verification",
+  "type": "object",
+  "properties": {
+    "runtime": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/dependency"
+      },
+      "description": "Runtime environments (node, java, python, etc.)"
+    },
+    "tools": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/dependency"
+      },
+      "description": "Development tools (npm, docker, etc.)"
+    },
+    "servers": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/dependency"
+      },
+      "description": "Server software (tomcat, nginx, etc.)"
+    },
+    "databases": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/dependency"
+      },
+      "description": "Database systems (postgresql, mysql, etc.)"
+    }
+  },
+  "$defs": {
+    "dependency": {
+      "type": "object",
+      "required": ["name", "checkCommand"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Dependency name"
+        },
+        "minVersion": {
+          "type": "string",
+          "description": "Minimum required version"
+        },
+        "checkCommand": {
+          "type": "string",
+          "description": "Command to check if dependency is installed"
+        },
+        "required": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether this dependency is required"
+        },
+        "optional": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether this dependency is optional"
+        },
+        "installInstructions": {
+          "type": "string",
+          "description": "Instructions for installing this dependency"
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

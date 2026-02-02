@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "memory_index.schema.json",
+  "title": "Memory Index Schema",
+  "description": "Schema for memory index files",
+  "type": "object",
+  "required": ["version", "last_updated", "categories"],
+  "properties": {
+    "version": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Index version number"
+    },
+    "last_updated": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last update timestamp"
+    },
+    "categories": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "description"],
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "Category path"
+          },
+          "description": {
+            "type": "string",
+            "description": "Category description"
+          },
+          "entry_count": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Number of entries in this category"
+          },
+          "subcategories": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Subcategory names"
+          },
+          "related_categories": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Related category paths"
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Category creation timestamp"
+          },
+          "created_by": {
+            "type": "string",
+            "description": "Agent that created this category"
+          }
+        }
+      },
+      "description": "List of all categories"
+    },
+    "pending_classification": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Number of entries awaiting classification"
+    },
+    "category_suggestions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "suggested_path": { "type": "string" },
+          "reason": { "type": "string" },
+          "suggested_by": { "type": "string" },
+          "entries_affected": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      },
+      "description": "Suggested new categories"
+    }
+  },
+  "additionalProperties": false
+}
